@@ -209,9 +209,9 @@
   const LS_DEFAULTS_DONE = 'bus_info_defaults_applied';
   const WORKER_URL = 'https://bus-info.dltpcjsrnr.workers.dev';
   const DEFAULT_STOPS = [
+    { stationId: '202000008', name: '동수원사거리' },
     { stationId: '202000007', name: '성빈센트병원' },
     { stationId: '202000082', name: '한국전력경기사업본부·한라시그마팰리스' },
-    { stationId: '202000008', name: '동수원사거리' },
   ];
 
   let savedStops = JSON.parse(localStorage.getItem(LS_STOPS) || '[]');
