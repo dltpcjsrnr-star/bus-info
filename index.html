@@ -407,8 +407,7 @@
       const n = Number(t);
       if (!isNaN(n)) {
         if (n <= 0) return '곧도착';
-        const m = Math.ceil(n / 60);
-        return `${m}분후`;
+        return `${n}분후`;
       }
     }
     const loc = it.locationNo1 ?? it.LOCATION_NO1;
