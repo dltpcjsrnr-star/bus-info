@@ -159,24 +159,6 @@
   }
   .error-box { color: var(--warn); }
 
-  .debug-toggle {
-    font-size: 11px;
-    color: var(--sub);
-    text-align: right;
-    cursor: pointer;
-    margin-top: 6px;
-    text-decoration: underline;
-  }
-  pre.debug {
-    background: #10131f;
-    color: #b7ffcb;
-    font-size: 10.5px;
-    padding: 10px;
-    border-radius: 8px;
-    overflow-x: auto;
-    max-height: 260px;
-  }
-
   .config-box textarea {
     width: 100%;
     font-family: monospace;
@@ -218,8 +200,6 @@
       <button onclick="loadArrivals(true)">↻ 새로고침</button>
     </div>
     <div id="arrivalList"></div>
-    <div class="debug-toggle" onclick="toggleDebug()">원본 응답 보기 / 숨기기</div>
-    <pre class="debug" id="debugBox" style="display:none;"></pre>
   </div>
 
 </main>
@@ -268,8 +248,7 @@
       const data = await res.json();
       const items = extractList(data, ['busStationList', 'stationList', 'items', 'item']);
       if (!items.length) {
-        resultsEl.innerHTML = `<div class="empty">검색 결과가 없습니다.</div><div class="debug-toggle" onclick="showRaw(this)">원본 응답 보기</div>`;
-        resultsEl.querySelector('.debug-toggle').dataset.raw = JSON.stringify(data, null, 2);
+        resultsEl.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
         return;
       }
       resultsEl.innerHTML = items.map(it => {
@@ -284,10 +263,6 @@
     } catch (e) {
       resultsEl.innerHTML = `<div class="error-box">검색 실패: ${e}</div>`;
     }
-  }
-
-  function showRaw(el) {
-    alert(el.dataset.raw?.slice(0, 1500) || '데이터 없음');
   }
 
   function addStop(stationId, name) {
@@ -378,7 +353,6 @@
     try {
       const res = await fetch(`${getWorkerUrl()}/api/arrivals?stationId=${encodeURIComponent(activeStopId)}`);
       const data = await res.json();
-      document.getElementById('debugBox').textContent = JSON.stringify(data, null, 2);
 
       const items = extractList(data, ['busArrivalList', 'arrivalList', 'items', 'item']);
       items.sort((a, b) => sortKey(a) - sortKey(b));
@@ -435,11 +409,6 @@
     const near = !imminent && status.endsWith('분후') && parseInt(status) <= 3;
     const label = crowd ? `${crowd} ${status}` : status;
     return `<span class="bus-chip${imminent ? ' imminent' : near ? ' near' : ''}">${routeName}<span class="chip-status">(${label})</span></span>`;
-  }
-
-  function toggleDebug() {
-    const box = document.getElementById('debugBox');
-    box.style.display = box.style.display === 'none' ? 'block' : 'none';
   }
 </script>
 
