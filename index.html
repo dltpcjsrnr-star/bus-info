@@ -100,7 +100,7 @@
     white-space: nowrap;
   }
 
-  .stop-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .stop-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
   .stop-tabs button {
     flex: none;
     background: #fff;
@@ -203,11 +203,6 @@
       <input id="searchInput" placeholder="정류장 이름으로 검색 (예: 성빈센트병원)" />
       <button onclick="searchStation()">검색</button>
     </div>
-    <div class="quick-tags">
-      <button onclick="addStop('202000007', '성빈센트병원')">성빈센트병원</button>
-      <button onclick="addStop('202000082', '한국전력경기사업본부·한라시그마팰리스')">한국전력경기사업본부·한라시그마팰리스</button>
-      <button onclick="addStop('202000008', '동수원사거리')">동수원사거리</button>
-    </div>
     <div id="searchResults"></div>
   </div>
 
@@ -231,9 +226,20 @@
 
 <script>
   const LS_STOPS = 'bus_info_saved_stops';
+  const LS_DEFAULTS_DONE = 'bus_info_defaults_applied';
   const WORKER_URL = 'https://bus-info.dltpcjsrnr.workers.dev';
+  const DEFAULT_STOPS = [
+    { stationId: '202000007', name: '성빈센트병원' },
+    { stationId: '202000082', name: '한국전력경기사업본부·한라시그마팰리스' },
+    { stationId: '202000008', name: '동수원사거리' },
+  ];
 
   let savedStops = JSON.parse(localStorage.getItem(LS_STOPS) || '[]');
+  if (!localStorage.getItem(LS_DEFAULTS_DONE)) {
+    savedStops = DEFAULT_STOPS.slice();
+    localStorage.setItem(LS_STOPS, JSON.stringify(savedStops));
+    localStorage.setItem(LS_DEFAULTS_DONE, '1');
+  }
   let activeStopId = savedStops[0]?.stationId || null;
   let refreshTimer = null;
 
